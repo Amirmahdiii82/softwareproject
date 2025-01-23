@@ -1,0 +1,13 @@
+<!-- templates/news/create_news.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-form">
+    <h2>Create News</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Create News</button>
+    </form>
+</div>
+{% endblock %}

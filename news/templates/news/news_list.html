@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="news-container">
+    {% if user.is_authenticated and user.role in 'admin,senior' %}
+        <a href="{% url 'create_news' %}" class="btn btn-primary">Create New Post</a>
+    {% endif %}
+
+    {% for news in news_list %}
+        <article class="news-item">
+            <h2 class="news-title">{{ news.title }}</h2>
+            <div class="news-meta">
+                <span>By {{ news.author.username }}</span>
+                <span>{{ news.created_at|date:"F d, Y" }}</span>
+                <span>Likes: {{ news.like_count }}</span>
+                <span>Comments: {{ news.comment_count }}</span>
+            </div>
+            <div class="news-content">
+                {{ news.content }}
+            </div>
+            
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'like_news' news.id %}" class="like-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">
+                        Like ({{ news.like_count }})
+                    </button>
+                </form>
+            {% endif %}
+        </article>
+    {% empty %}
+        <p>No news articles available.</p>
+    {% endfor %}
+</div>
+{% endblock %}
